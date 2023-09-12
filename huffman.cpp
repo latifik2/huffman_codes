@@ -7,6 +7,12 @@
 #include <sstream>
 
 
+class Compare;
+class TreeNode;
+
+using PQ = std::priority_queue<TreeNode *, std::vector<TreeNode *>, Compare>;
+
+
 class TreeNode {
 private:
     char character;
@@ -22,20 +28,29 @@ public:
         this->character = character;
     }
 
-    bool operator()(const TreeNode *&a, const TreeNode *&b) {
-        return a->weigth > b->weigth;
-    }
+    // bool operator()(const TreeNode *&a, const TreeNode *&b) {
+    //     return a->weigth > b->weigth;
+    // }
 
-    using PQ = std::priority_queue<TreeNode *, std::vector<TreeNode *>, TreeNode>;
+    
 
     friend PQ* _CreateTreeNodes(const std::map<char, int> &charFreq);
     friend PQ* CreateHuffmanTree(PQ *pq);
     friend void GenHuffmanCodes(const TreeNode *node, std::vector<uint8_t> &code, std::map<char, std::vector<uint8_t>> &code_map);
     friend void DebugPQPrint(std::priority_queue<TreeNode> *pq);
     friend void printBT(const std::string& prefix, const TreeNode* node, bool isLeft);
+
+    friend class Compare;
 };
 
-using PQ = std::priority_queue<TreeNode *, std::vector<TreeNode *>, TreeNode>;
+class Compare {
+public:
+    bool operator()(const TreeNode *a, const TreeNode *b) {
+        return a->weigth < b->weigth;
+    }
+};
+
+//using PQ = std::priority_queue<TreeNode *, std::vector<TreeNode *>, Compare>;
 
 
 
@@ -52,8 +67,8 @@ void DebugPQPrint(std::priority_queue<TreeNode> *pq) {
 
 PQ* _CreateTreeNodes(const std::map<char, int> &charFreq) {
 
-    PQ pq;
-    PQ* p_pq;
+    PQ *pq = new std::priority_queue<TreeNode *, std::vector<TreeNode *>, Compare>();
+
     for (auto it = charFreq.begin(); it != charFreq.end(); it++)
         pq->push(new TreeNode(it->second, it->first));
 
