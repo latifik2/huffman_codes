@@ -33,20 +33,20 @@ public:
     // }
 
     
-
+    friend class Compare;
     friend PQ* _CreateTreeNodes(const std::map<char, int> &charFreq);
     friend PQ* CreateHuffmanTree(PQ *pq);
     friend void GenHuffmanCodes(const TreeNode *node, std::vector<uint8_t> &code, std::map<char, std::vector<uint8_t>> &code_map);
-    friend void DebugPQPrint(std::priority_queue<TreeNode> *pq);
+    friend void DebugPQPrint(PQ *pq);
     friend void printBT(const std::string& prefix, const TreeNode* node, bool isLeft);
 
-    friend class Compare;
+    
 };
 
 class Compare {
 public:
     bool operator()(const TreeNode *a, const TreeNode *b) {
-        return a->weigth < b->weigth;
+        return a->weigth > b->weigth;
     }
 };
 
@@ -58,9 +58,9 @@ void DebugPrint(std::string text) {
     std::cout << text << std::endl;
 }
 
-void DebugPQPrint(std::priority_queue<TreeNode> *pq) {
+void DebugPQPrint(PQ *pq) {
     while (!pq->empty()) {
-        std::cout << pq->top().weigth << std::endl;
+        std::cout << pq->top()->weigth << std::endl;
         pq->pop();
     }
 }
