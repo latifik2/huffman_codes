@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 #include "../headers/Debug.h"
 
 void Debug::printBT(const std::string& prefix, const TreeNode* node, bool isLeft)
@@ -21,4 +22,8 @@ void Debug::printBT(const std::string& prefix, const TreeNode* node, bool isLeft
 void Debug::printBT(const TreeNode* node)
 {
     Debug::printBT("", node, false);    
+}
+
+void Debug::DebugPrint(std::string text) {
+    std::cout << text << std::endl;
 }

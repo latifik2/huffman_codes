@@ -1,6 +1,10 @@
+#pragma once
+
 #include "TreeNode.h"
 
 class Debug {
-    void printBT(const TreeNode* node);
-    void printBT(const std::string& prefix, const TreeNode* node, bool isLeft);
+public:
+    static void printBT(const TreeNode* node);
+    static void printBT(const std::string& prefix, const TreeNode* node, bool isLeft);
+    static void DebugPrint(std::string text);
 };

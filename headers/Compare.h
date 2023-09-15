@@ -1,3 +1,5 @@
+#pragma once
+
 #include "TreeNode.h"
 
 class Compare {

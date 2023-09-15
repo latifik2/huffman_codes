@@ -1,3 +1,5 @@
+#pragma once
+
 #include <map>
 #include <queue>
 #include <vector>
@@ -6,10 +8,9 @@
 
 class Compare;
 class Huffman;
-class TreeNode;
 class Debug;
 
-using PQ = std::priority_queue<TreeNode *, std::vector<TreeNode *>, Compare>;
+
 
 class TreeNode {
 public:
@@ -31,3 +32,5 @@ private:
     TreeNode *left;
     TreeNode *right;
 };
+
+using PQ = std::priority_queue<TreeNode *, std::vector<TreeNode *>, Compare>;
