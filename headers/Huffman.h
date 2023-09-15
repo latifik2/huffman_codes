@@ -5,13 +5,19 @@
 
 class Huffman {
 public:
-    PQ* CreateTreeNodes(const std::map<char, int> &charFreq);
+    PQ* CreateTreeNodes();
 
-    PQ* CreateHuffmanTree(PQ *pq);
+    void CreateHuffmanTree();
 
     void GenHuffmanCodes(const TreeNode *node, std::vector<uint8_t> code, std::map<char, std::vector<uint8_t>> &code_map);
 
-    void CountFrequency(std::string text, std::map<char, int> &charFreq);
+    void CountFrequency(std::string text);
 
-    int GetEncodedTextSize(const std::map<char, int> &char_freq, const std::map<char, std::vector<uint8_t>> &code_map);
+    int GetEncodedTextSize();
+
+private:
+    std::map<char, int> charFreq;
+    std::vector<uint8_t> code;
+    std::map<char, std::vector<uint8_t>> codeMap;
+    PQ *pq;
 };
