@@ -8,7 +8,7 @@
 #include "../headers/Huffman.h"
 #include "../headers/Debug.h"
 #include "../headers/App.h"
-#include "../lib/BitArray.h"
+//#include "../lib/BitArray.h"
 
 App::App(Mode mode, std::string filePath) {
     this->mode = mode;
@@ -21,11 +21,28 @@ App::~App() {
 
 void App::Init() {
     if (this->mode == Mode::encode)
-        ReadFile(this->filePath);
+        ReadTextFile(this->filePath);
     
 }
 
-void App::ReadFile(const std::string path) {
+void App::Run() {
+    Huffman huffman;
+    TreeNode *root;
+    std::vector<uint8_t> code;
+
+    huffman.CountFrequency(this->text);
+    huffman.CreateTreeNodes();
+    huffman.CreateHuffmanTree();
+
+    root = huffman.pq->top();
+    huffman.GenHuffmanCodes(root, code);
+    // //DebugPQPrint(pq);
+    // TreeNode *root  = pq->top();
+    Debug::printBT(root);
+    // int new_size = huffman.GetEncodedTextSize(char_freq, code_map);
+}
+
+void App::ReadTextFile(const std::string path) {
     std::ifstream file;
     std::stringstream buffer;
 
@@ -40,6 +57,9 @@ void App::ReadFile(const std::string path) {
     this->text = buffer.str();
 }
 
+void App::ReadBinFile(const std::string path) {
+}
+
 int main(int argc, char *argv[]) {
 
     if (argc < 2) {
@@ -47,25 +67,10 @@ int main(int argc, char *argv[]) {
         return -1;
     }
 
-
-    
-
-    
-    // Huffman huffman;
-
-    // huffman.CountFrequency(text);
-    // pq = huffman.CreateTreeNodes();
-    // huffman.CreateHuffmanTree(pq);
-    // //DebugPQPrint(pq);
-
-    // TreeNode *root  = pq->top();
-    
-
-    // Debug::printBT(root);
-
-    // huffman.GenHuffmanCodes(root, code, code_map);
-
-    // int new_size = huffman.GetEncodedTextSize(char_freq, code_map);
+    std::string filePath(argv[1]);
+    App app(App::Mode::encode, filePath);
+    app.Init();
+    app.Run();
 
     return 0;
 }

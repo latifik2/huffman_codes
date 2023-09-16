@@ -14,7 +14,8 @@ public:
 
     void Init();
     void Run();
-    void ReadFile(const std::string path);
+    void ReadTextFile(const std::string path);
+    void ReadBinFile(const std::string path);
 
 private:
     std::string filePath;

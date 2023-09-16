@@ -3,13 +3,13 @@
 using PQ = std::priority_queue<TreeNode *, std::vector<TreeNode *>, Compare>;
 
 
-PQ* Huffman::CreateTreeNodes() {
-    PQ *pq = new std::priority_queue<TreeNode *, std::vector<TreeNode *>, Compare>();
+void Huffman::CreateTreeNodes() {
+    this->pq = new std::priority_queue<TreeNode *, std::vector<TreeNode *>, Compare>();
 
     for (auto it = this->charFreq.begin(); it != this->charFreq.end(); it++)
         pq->push(new TreeNode(it->second, it->first));
 
-    return pq;
+    //return pq;
 }
 
 
@@ -23,22 +23,22 @@ void Huffman::CreateHuffmanTree() {
     }
 }
 
-void Huffman::GenHuffmanCodes(const TreeNode *node, std::vector<uint8_t> code, std::map<char, std::vector<uint8_t>> &code_map) {
+void Huffman::GenHuffmanCodes(const TreeNode *node, std::vector<uint8_t> code) {
     if (node->character != 0) {
-        code_map[node->character] = code;
-        code.clear();
+        codeMap[node->character] = code;
+        code.clear(); //should probably replace this with code.pop() and pass code vector as reference
         return;
     }
 
     if (node->left != nullptr) {
         code.push_back(0);
-        Huffman::GenHuffmanCodes(node->left, code, code_map);
+        Huffman::GenHuffmanCodes(node->left, code);
         code.pop_back();
     }
 
     if (node->right != nullptr) {
         code.push_back(1);
-        Huffman::GenHuffmanCodes(node->right, code, code_map);
+        Huffman::GenHuffmanCodes(node->right, code);
         code.pop_back();
     }
 
