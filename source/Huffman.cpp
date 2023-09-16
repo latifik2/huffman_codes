@@ -2,14 +2,22 @@
 //#include "../headers/TreeNode.h"
 using PQ = std::priority_queue<TreeNode *, std::vector<TreeNode *>, Compare>;
 
+Huffman::Huffman()
+    : nodesCount(0) {
+}
+
+void Huffman::CountNodes() {
+    this->nodesCount++;
+}
 
 void Huffman::CreateTreeNodes() {
     this->pq = new std::priority_queue<TreeNode *, std::vector<TreeNode *>, Compare>();
 
-    for (auto it = this->charFreq.begin(); it != this->charFreq.end(); it++)
+    for (auto it = this->charFreq.begin(); it != this->charFreq.end(); it++) {
         pq->push(new TreeNode(it->second, it->first));
-
-    //return pq;
+        CountNodes();
+    }
+    
 }
 
 
@@ -20,6 +28,7 @@ void Huffman::CreateHuffmanTree() {
         auto tmp2 = this->pq->top();
         this->pq->pop();
         this->pq->push(new TreeNode(tmp1->weigth + tmp2->weigth, 0, tmp1, tmp2));
+        CountNodes();
     }
 }
 

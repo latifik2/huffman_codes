@@ -8,11 +8,10 @@
 #include "../headers/Huffman.h"
 #include "../headers/Debug.h"
 #include "../headers/App.h"
-//#include "../lib/BitArray.h"
+#include "../lib/BitArray.h"
 
-App::App(Mode mode, std::string filePath) {
-    this->mode = mode;
-    this->filePath = filePath;
+App::App(Mode mode, std::string filePath)
+: mode(mode), filePath(filePath) {
 }
 
 App::~App() {
@@ -36,11 +35,15 @@ void App::Run() {
 
     root = huffman.pq->top();
     huffman.GenHuffmanCodes(root, code);
-    // //DebugPQPrint(pq);
-    // TreeNode *root  = pq->top();
+   
     Debug::printBT(root);
-    // int new_size = huffman.GetEncodedTextSize(char_freq, code_map);
+    int newSize = huffman.GetEncodedTextSize();
+    
+    BitArray bitArray(newSize);
+    SetBufferTree(bitArray, root);
+    SetBuffer(bitArray, huffman.codeMap);
 }
+
 
 void App::ReadTextFile(const std::string path) {
     std::ifstream file;
@@ -57,8 +60,35 @@ void App::ReadTextFile(const std::string path) {
     this->text = buffer.str();
 }
 
-void App::ReadBinFile(const std::string path) {
+void App::ReadBinFile(const std::string path) {}
+void App::WriteBinaryFile() {}
+
+void App::AppendChar(BitArray &bitArray, char chr) {
+    for (uint8_t i = 0; i < 8; i++) {
+        bitArray.append_bit(chr & 1);
+        chr >>= 1;
+    }
 }
+
+void App::SetBufferTree(BitArray &bitArray, TreeNode *node) {
+    if (node->character != 0) {
+        bitArray.append_bit(0);
+        AppendChar(bitArray, node->character);
+        return;
+    }
+    bitArray.append_bit(1);
+    SetBufferTree(bitArray, node->left);
+    SetBufferTree(bitArray, node->right);
+}
+
+void App::SetBuffer(BitArray &bitArray, std::map<char, std::vector<uint8_t>> &codeMap) {
+    for (const auto &chr : text) {
+        auto code = codeMap[chr];
+        for (auto it = code.begin(); it != code.end(); it++)
+            bitArray.append_bit(*it);
+    }
+}
+
 
 int main(int argc, char *argv[]) {
 

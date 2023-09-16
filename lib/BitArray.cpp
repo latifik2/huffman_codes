@@ -1,9 +1,10 @@
 #include "BitArray.h"
 #include <cstring>
 
-BitArray::BitArray(int bit_size) {
-    this->index = 0;
-	this->size = bit_size / 8;
+BitArray::BitArray(int bit_size)
+	: index(0), size(bit_size / 8){
+    // this->index = 0;
+	// this->size = bit_size / 8;
 	if (bit_size % 8 != 0)
 		this->size++;
 		
@@ -11,9 +12,10 @@ BitArray::BitArray(int bit_size) {
 	std::fill(&bit_array[0], &bit_array[this->size - 1], 0);
 }
 
-BitArray::BitArray(uint8_t *bit_array, int bit_size) {
-    this->index = 0;
-	this->size = bit_size / 8;
+BitArray::BitArray(uint8_t *bit_array, int bit_size)
+	: index(0), size(bit_size / 8) {
+    // this->index = 0;
+	// this->size = bit_size / 8;
 	if (bit_size % 8 != 0)
 		this->size++;
 		

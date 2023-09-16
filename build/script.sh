@@ -1,4 +1,4 @@
 #!/bin/bash
 
-g++ ../source/* -o App
+g++ ../source/* ../lib/*.cpp -o App
 ./App
