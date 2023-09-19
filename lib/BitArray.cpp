@@ -2,7 +2,7 @@
 #include <cstring>
 
 BitArray::BitArray(int bit_size)
-	: index(0), size(bit_size / 8){
+	: index(0), size(bit_size / 8), opsCounter(0) {
     // this->index = 0;
 	// this->size = bit_size / 8;
 	if (bit_size % 8 != 0)
@@ -13,7 +13,7 @@ BitArray::BitArray(int bit_size)
 }
 
 BitArray::BitArray(uint8_t *bit_array, int bit_size)
-	: index(0), size(bit_size / 8) {
+	: index(0), size(bit_size / 8), opsCounter(0) {
     // this->index = 0;
 	// this->size = bit_size / 8;
 	if (bit_size % 8 != 0)
@@ -24,7 +24,7 @@ BitArray::BitArray(uint8_t *bit_array, int bit_size)
 }
 
 BitArray::~BitArray() {
-	delete[] bit_array;
+	//delete[] bit_array;
 }
 
 uint8_t BitArray::get_bit(int i) {
@@ -76,4 +76,26 @@ uint8_t BitArray::pop_bit() {
 
 const uint8_t* BitArray::get_bit_array() {
 	return this->bit_array;
-}	
+}
+
+void BitArray::CountOperations() {
+	opsCounter++;
+}
+
+int BitArray::GetOperations() {
+	return opsCounter;
+}
+
+int BitArray::GetSize() {
+	return size;
+}
+
+int BitArray::AlignIndex() {
+	int rest = index % 8;
+
+	if (rest == 0)
+		return index;
+	
+	index += index + (rest - 8);
+	return index;
+}

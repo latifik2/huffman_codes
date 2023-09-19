@@ -40,8 +40,14 @@ void App::Run() {
     int newSize = huffman.GetEncodedTextSize();
     
     BitArray bitArray(newSize);
+
     SetBufferTree(bitArray, root);
+    bitArray.AlignIndex();
+    int treeSize = bitArray.GetOperations();
+
     SetBuffer(bitArray, huffman.codeMap);
+
+    WriteBinFile(treeSize, bitArray);
 }
 
 
@@ -61,7 +67,21 @@ void App::ReadTextFile(const std::string path) {
 }
 
 void App::ReadBinFile(const std::string path) {}
-void App::WriteBinaryFile() {}
+
+void App::WriteBinFile(int treeSize, BitArray &bitArray) {
+    std::ofstream file;
+    encodedData = bitArray.get_bit_array();
+
+    file.open("../EncodedData", std::ios::out | std::ios::binary);
+
+    if (!file.is_open()) {
+        Debug::DebugPrint("Unable to open file.");
+        return;
+    }   
+
+    file.write(reinterpret_cast<const char*>(&treeSize), 4);
+    file.write(reinterpret_cast<const char*>(encodedData), bitArray.GetSize());
+}
 
 void App::AppendChar(BitArray &bitArray, char chr) {
     for (uint8_t i = 0; i < 8; i++) {
@@ -71,6 +91,7 @@ void App::AppendChar(BitArray &bitArray, char chr) {
 }
 
 void App::SetBufferTree(BitArray &bitArray, TreeNode *node) {
+    bitArray.CountOperations();
     if (node->character != 0) {
         bitArray.append_bit(0);
         AppendChar(bitArray, node->character);
@@ -93,7 +114,7 @@ void App::SetBuffer(BitArray &bitArray, std::map<char, std::vector<uint8_t>> &co
 int main(int argc, char *argv[]) {
 
     if (argc < 2) {
-        Debug::DebugPrint("Not enough args.\nUsage: ./App encode/decode");\
+        Debug::DebugPrint("Not enough args.\nUsage: ./App encode/decode");
         return -1;
     }
 

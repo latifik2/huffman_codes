@@ -17,7 +17,7 @@ public:
     void Run();
     void ReadTextFile(const std::string path);
     void ReadBinFile(const std::string path);
-    void WriteBinaryFile();
+    void WriteBinFile(int treeSize, BitArray &BitArray);
     void AppendChar(BitArray &bitArray, char chr);
     void SetBufferTree(BitArray &BitArray, TreeNode *node);
     void SetBuffer(BitArray &bitArray, std::map<char, std::vector<uint8_t>> &codeMap);
@@ -26,5 +26,5 @@ private:
     std::string filePath;
     std::string text;
     Mode mode;
-    uint8_t *encodedData;
+    const uint8_t *encodedData;
 };
