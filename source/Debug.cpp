@@ -24,6 +24,7 @@ void Debug::printBT(const TreeNode* node)
     Debug::printBT("", node, false);    
 }
 
-void Debug::DebugPrint(std::string text) {
+template <class T>
+void Debug::DebugPrint(T &text) {
     std::cout << text << std::endl;
 }

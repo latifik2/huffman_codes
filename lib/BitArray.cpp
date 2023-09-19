@@ -27,7 +27,7 @@ BitArray::~BitArray() {
 	//delete[] bit_array;
 }
 
-uint8_t BitArray::get_bit(int i) {
+uint8_t BitArray::GetBit(int i) {
 	int byte_index = i / 8;
 	if (byte_index >= this->size)
 		return 2;
@@ -37,14 +37,14 @@ uint8_t BitArray::get_bit(int i) {
 	return bit_array[byte_index] & BITS[bit_index] > 0 ? 1 : 0;
 }
 
-uint8_t BitArray::get_byte(int i) {
+uint8_t BitArray::GetByte(int i) {
 	if (i >= this->size)
 		return 0;
 		
 	return bit_array[i];
 }
 
-bool BitArray::set_bit(int i, uint8_t value) {
+bool BitArray::SetBit(int i, uint8_t value) {
 	int byte_index = i / 8;
 	if (byte_index >= this->size)
 		return false;
@@ -59,22 +59,22 @@ bool BitArray::set_bit(int i, uint8_t value) {
 	return true;
 }
 
-bool BitArray::append_bit(uint8_t value) {
-	bool result = set_bit(this->index, value);
+bool BitArray::AppendBit(uint8_t value) {
+	bool result = SetBit(this->index, value);
 	if (result)
 		this->index++;
 	
 	return result;
 }
 
-uint8_t BitArray::pop_bit() {
-    uint8_t result = BitArray::get_bit(this->index);
+uint8_t BitArray::PopBit() {
+    uint8_t result = BitArray::GetBit(this->index);
 	if (result != 2)
 		this->index++;
 	return result;
 }
 
-const uint8_t* BitArray::get_bit_array() {
+uint8_t* BitArray::GetBitArray() {
 	return this->bit_array;
 }
 

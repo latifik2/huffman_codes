@@ -8,12 +8,12 @@ public:
     BitArray(uint8_t *bit_array, int bit_size);
     ~BitArray();
 
-    uint8_t get_bit(int i);
-    uint8_t get_byte(int i);
-    bool set_bit(int i, uint8_t value);
-    bool append_bit(uint8_t value);
-    uint8_t pop_bit();
-    const uint8_t *get_bit_array();
+    uint8_t GetBit(int i);
+    uint8_t GetByte(int i);
+    bool SetBit(int i, uint8_t value);
+    bool AppendBit(uint8_t value);
+    uint8_t PopBit();
+    uint8_t *GetBitArray();
     void CountOperations();
     int GetOperations();
     int GetSize();
