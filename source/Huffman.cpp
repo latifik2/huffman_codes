@@ -32,6 +32,31 @@ void Huffman::CreateHuffmanTree() {
     }
 }
 
+void Huffman::RestoreHuffmanTree(TreeNode *node, BitArray &bitArray, bool isLeft) {
+    uint8_t bit = bitArray.PopBit();
+    if (bit == 0) {
+        BitArray chr(8);
+        for (int i = 0; i < 8; i++) {
+            uint8_t chr_bit = bitArray.PopBit();
+            chr.AppendBit(chr_bit);
+        }
+        if (isLeft)
+            node->left = new TreeNode(0, char(chr.GetByte(0)));
+        else
+            node->right = new TreeNode(0, char(chr.GetByte(0)));
+        return;
+    }
+    else {
+        if (isLeft)
+            node->left = new TreeNode(0);
+        else
+            node->right = new TreeNode(0);
+    }
+
+    Huffman::RestoreHuffmanTree(node->left, bitArray, true);
+    Huffman::RestoreHuffmanTree(node->right, bitArray, false);
+}
+
 void Huffman::GenHuffmanCodes(const TreeNode *node, std::vector<uint8_t> code) {
     if (node->character != 0) {
         codeMap[node->character] = code;

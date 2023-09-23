@@ -77,6 +77,9 @@ void App::Decode() {
     TreeNode *root = new TreeNode(0);
     uint8_t test = bitArray.PopBit();
 
+    Huffman huffman;
+    huffman.RestoreHuffmanTree(root, bitArray, true);
+    
 }
 
 

@@ -32,7 +32,8 @@ uint8_t BitArray::GetBit(int i) {
 	if (byte_index >= this->size)
 		return 2;
 
-	int bit_index = i < 7 ? i % 8 : 7 - (i % 8);
+	//int bit_index = i < 7 ? i % 8 : 7 - (i % 8);
+	int bit_index = 7 - (i % 8);
 
 	return bit_array[byte_index] & BITS[bit_index] > 0 ? 1 : 0;
 }
@@ -49,7 +50,8 @@ bool BitArray::SetBit(int i, uint8_t value) {
 	if (byte_index >= this->size)
 		return false;
 
-	int bit_index = i < 7 ? i % 8 : 7 - (i % 8);
+	// int bit_index = i < 7 ? i % 8 : 7 - (i % 8);
+	int bit_index = 7 - (i % 8);
 		//bit_array[byte_index] |= value == 1 ? BITS[bit_index] : ~BITS[bit_index];
 	if (value == 1)
 		bit_array[byte_index] |= BITS[bit_index];

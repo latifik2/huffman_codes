@@ -1,4 +1,4 @@
 #!/bin/bash
 
 g++ ../source/* ../lib/*.cpp -o App
-./App
+./App $1 $2

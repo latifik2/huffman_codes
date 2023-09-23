@@ -9,5 +9,5 @@ public:
     static void printBT(const std::string& prefix, const TreeNode* node, bool isLeft);
 
     template <class T>
-    static void DebugPrint(T &text);
+    static void DebugPrint(T &text) { std::cout << text << std::endl; }
 };
