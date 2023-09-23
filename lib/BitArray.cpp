@@ -1,26 +1,27 @@
 #include "BitArray.h"
+#include "../headers/Debug.h"
 #include <cstring>
 
-BitArray::BitArray(int bit_size)
-	: index(0), size(bit_size / 8), opsCounter(0) {
+BitArray::BitArray(int bitSize)
+	: index(0), size(bitSize / 8), opsCounter(0) {
     // this->index = 0;
-	// this->size = bit_size / 8;
-	if (bit_size % 8 != 0)
+	// this->size = bitSize / 8;
+	if (bitSize % 8 != 0)
 		this->size++;
 		
-	bit_array = new uint8_t[this->size];
-	std::fill(&bit_array[0], &bit_array[this->size - 1], 0);
+	_bitArray = new uint8_t[this->size];
+	std::fill(&_bitArray[0], &_bitArray[this->size - 1], 0);
 }
 
-BitArray::BitArray(uint8_t *bit_array, int bit_size)
-	: index(0), size(bit_size / 8), opsCounter(0) {
+BitArray::BitArray(uint8_t *bitArray, int bitSize)
+	: index(0), size(bitSize / 8), opsCounter(0) {
     // this->index = 0;
-	// this->size = bit_size / 8;
-	if (bit_size % 8 != 0)
+	// this->size = bitSize / 8;
+	if (bitSize % 8 != 0)
 		this->size++;
 		
-	bit_array = new uint8_t[this->size];
-    std::memcpy(this->bit_array, bit_array, this->size);
+	this->_bitArray = new uint8_t[this->size];
+    std::memcpy(this->_bitArray, bitArray, this->size);
 }
 
 BitArray::~BitArray() {
@@ -34,15 +35,18 @@ uint8_t BitArray::GetBit(int i) {
 
 	//int bit_index = i < 7 ? i % 8 : 7 - (i % 8);
 	int bit_index = 7 - (i % 8);
+	Debug::DebugPrint((int)_bitArray[byte_index]);
+	Debug::DebugPrint((int)BITS[bit_index]);
 
-	return bit_array[byte_index] & BITS[bit_index] > 0 ? 1 : 0;
+
+	return (uint8_t)(_bitArray[byte_index] & BITS[bit_index]) > 0 ? 1 : 0;
 }
 
 uint8_t BitArray::GetByte(int i) {
 	if (i >= this->size)
 		return 0;
 		
-	return bit_array[i];
+	return _bitArray[i];
 }
 
 bool BitArray::SetBit(int i, uint8_t value) {
@@ -51,12 +55,12 @@ bool BitArray::SetBit(int i, uint8_t value) {
 		return false;
 
 	// int bit_index = i < 7 ? i % 8 : 7 - (i % 8);
-	int bit_index = 7 - (i % 8);
+	int bitIndex = 7 - (i % 8);
 		//bit_array[byte_index] |= value == 1 ? BITS[bit_index] : ~BITS[bit_index];
 	if (value == 1)
-		bit_array[byte_index] |= BITS[bit_index];
+		_bitArray[byte_index] |= BITS[bitIndex];
 	else
-		bit_array[byte_index] &= ~BITS[bit_index];
+		_bitArray[byte_index] &= ~BITS[bitIndex];
 
 	return true;
 }
@@ -77,7 +81,7 @@ uint8_t BitArray::PopBit() {
 }
 
 uint8_t* BitArray::GetBitArray() {
-	return this->bit_array;
+	return this->_bitArray;
 }
 
 void BitArray::CountOperations() {

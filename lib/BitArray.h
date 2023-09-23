@@ -5,7 +5,7 @@ class BitArray
 {
 public:
     BitArray(int bit_size);
-    BitArray(uint8_t *bit_array, int bit_size);
+    BitArray(uint8_t *bitArray, int bitSize);
     ~BitArray();
 
     uint8_t GetBit(int i);
@@ -20,7 +20,7 @@ public:
     int AlignIndex();
 
 private:
-    uint8_t *bit_array;
+    uint8_t *_bitArray;
 	int size;
 	int index;
     int opsCounter;
