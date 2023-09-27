@@ -33,12 +33,15 @@ void Huffman::CreateHuffmanTree() {
 }
 
 void Huffman::RestoreHuffmanTree(TreeNode *node, BitArray &bitArray, bool isLeft) {
+    if (node->character != 0)
+        return;
+
     uint8_t bit = bitArray.PopBit();
     if (bit == 0) {
         BitArray chr(8);
         for (int i = 0; i < 8; i++) {
             uint8_t chr_bit = bitArray.PopBit();
-            chr.AppendBit(chr_bit);
+            chr.AppendBit(BitArray::BitState(chr_bit));
         }
         if (isLeft)
             node->left = new TreeNode(0, char(chr.GetByte(0)));
@@ -102,4 +105,8 @@ int Huffman::GetEncodedTextSize() {
         it2++;
     }
     return size;
+}
+
+int Huffman::GetCharsNum() {
+    return charFreq.size();
 }

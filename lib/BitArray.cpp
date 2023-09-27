@@ -49,7 +49,7 @@ uint8_t BitArray::GetByte(int i) {
 	return _bitArray[i];
 }
 
-bool BitArray::SetBit(int i, uint8_t value) {
+bool BitArray::SetBit(int i, BitState state) {
 	int byte_index = i / 8;
 	if (byte_index >= this->size)
 		return false;
@@ -57,16 +57,28 @@ bool BitArray::SetBit(int i, uint8_t value) {
 	// int bit_index = i < 7 ? i % 8 : 7 - (i % 8);
 	int bitIndex = 7 - (i % 8);
 		//bit_array[byte_index] |= value == 1 ? BITS[bit_index] : ~BITS[bit_index];
-	if (value == 1)
+	
+	switch (state)
+	{
+	case ON:
 		_bitArray[byte_index] |= BITS[bitIndex];
-	else
+		break;
+	
+	case OFF:
 		_bitArray[byte_index] &= ~BITS[bitIndex];
+		break;
+	
+	default:
+		Debug::DebugPrint("Error! Unknown state!");
+		return false;
+		break;
+	}
 
 	return true;
 }
 
-bool BitArray::AppendBit(uint8_t value) {
-	bool result = SetBit(this->index, value);
+bool BitArray::AppendBit(BitState state) {
+	bool result = SetBit(this->index, state);
 	if (result)
 		this->index++;
 	

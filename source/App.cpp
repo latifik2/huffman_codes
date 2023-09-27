@@ -54,11 +54,12 @@ void App::Encode() {
     root = huffman.pq->top();
     huffman.GenHuffmanCodes(root, code);
    
-    //Debug::printBT(root);
+    Debug::printBT(root);
     int newSize = huffman.GetEncodedTextSize();
     Debug::DebugPrint<int>(newSize);
-    
-    BitArray bitArray(newSize);
+
+    int charsNum = huffman.GetCharsNum();
+    BitArray bitArray(8 * charsNum + newSize);
 
     SetBufferTree(bitArray, root);
     bitArray.AlignIndex();
@@ -66,7 +67,7 @@ void App::Encode() {
 
     SetBuffer(bitArray, huffman.codeMap);
 
-    WriteBinFile(treeSize, newSize, bitArray);
+    WriteBinFile(treeSize, newSize, charsNum,bitArray);
 }
 
 void App::Decode() {
@@ -79,6 +80,7 @@ void App::Decode() {
 
     Huffman huffman;
     huffman.RestoreHuffmanTree(root, bitArray, true);
+    huffman.RestoreHuffmanTree(root, bitArray, false);
     
 }
 
@@ -115,16 +117,17 @@ void App::ReadBinFile(const std::string path) {
     file.close();
 }
 
-void App::WriteBinFile(int treeSize, int newSize, BitArray &bitArray) {
+void App::WriteBinFile(int treeSize, int newSize, int charsNum, BitArray &bitArray) {
     std::ofstream file;
     encodedData = bitArray.GetBitArray();
 
     file.open("../EncodedData", std::ios::out | std::ios::binary);
 
-    CheckFile<std::ofstream>(file); 
+    CheckFile<std::ofstream>(file);
+    int size = charsNum * 8 + newSize;
 
     file.write(reinterpret_cast<const char*>(&treeSize), sizeof(int));
-    file.write(reinterpret_cast<const char*>(&newSize), sizeof(int));
+    file.write(reinterpret_cast<const char*>(&size), sizeof(int));
     file.write(reinterpret_cast<const char*>(encodedData), bitArray.GetSize());
 
     file.close();
@@ -132,19 +135,19 @@ void App::WriteBinFile(int treeSize, int newSize, BitArray &bitArray) {
 
 void App::AppendChar(BitArray &bitArray, char chr) {
     for (uint8_t i = 0; i < 8; i++) {
-        bitArray.AppendBit(chr & 1);
-        chr >>= 1;
+        bitArray.AppendBit(BitArray::BitState((chr & 0x80) >> 7));
+        chr <<= 1;
     }
 }
 
 void App::SetBufferTree(BitArray &bitArray, TreeNode *node) {
     bitArray.CountOperations();
     if (node->character != 0) {
-        bitArray.AppendBit(0);
+        bitArray.AppendBit(BitArray::OFF);
         AppendChar(bitArray, node->character);
         return;
     }
-    bitArray.AppendBit(1);
+    bitArray.AppendBit(BitArray::ON);
     SetBufferTree(bitArray, node->left);
     SetBufferTree(bitArray, node->right);
 }
@@ -154,7 +157,7 @@ void App::SetBuffer(BitArray &bitArray, std::map<char, std::vector<uint8_t>> &co
         auto code = codeMap[chr];
 
         for (auto it = code.begin(); it != code.end(); it++)
-            bitArray.AppendBit(*it);
+            bitArray.AppendBit(BitArray::BitState(*it));
     }
 }
 

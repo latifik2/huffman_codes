@@ -19,7 +19,7 @@ public:
     void Decode();
     void ReadTextFile(const std::string path);
     void ReadBinFile(const std::string path);
-    void WriteBinFile(int treeSize, int newSzie, BitArray &BitArray);
+    void WriteBinFile(int treeSize, int newSzie, int charsNum, BitArray &BitArray);
     void AppendChar(BitArray &bitArray, char chr);
     void SetBufferTree(BitArray &BitArray, TreeNode *node);
     void SetBuffer(BitArray &bitArray, std::map<char, std::vector<uint8_t>> &codeMap);

@@ -8,10 +8,15 @@ public:
     BitArray(uint8_t *bitArray, int bitSize);
     ~BitArray();
 
+    enum BitState {
+        ON = 1,
+        OFF = 0
+    };
+
     uint8_t GetBit(int i);
     uint8_t GetByte(int i);
-    bool SetBit(int i, uint8_t value);
-    bool AppendBit(uint8_t value);
+    bool SetBit(int i, BitState state);
+    bool AppendBit(BitState state);
     uint8_t PopBit();
     uint8_t *GetBitArray();
     void CountOperations();
