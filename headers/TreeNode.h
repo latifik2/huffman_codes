@@ -11,7 +11,7 @@ class Debug;
 
 class TreeNode {
 public:
-    TreeNode(int weigth, char character = 0, TreeNode *left = nullptr, TreeNode *right = nullptr);
+    TreeNode(int weigth, char character = 0, TreeNode *left = nullptr, TreeNode *right = nullptr, TreeNode *parent = nullptr);
 
     friend class Compare;
     friend class Huffman;
@@ -23,6 +23,7 @@ private:
     int weigth;
     TreeNode *left;
     TreeNode *right;
+    TreeNode *parent;
 };
 
 using PQ = std::priority_queue<TreeNode *, std::vector<TreeNode *>, Compare>;

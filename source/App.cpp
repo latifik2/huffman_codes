@@ -79,8 +79,8 @@ void App::Decode() {
     uint8_t test = bitArray.PopBit();
 
     Huffman huffman;
-    huffman.RestoreHuffmanTree(root->left, bitArray, true);
-    huffman.RestoreHuffmanTree(root->right, bitArray, false);
+    root->left = huffman.RestoreHuffmanTree(root->left, bitArray, true);
+    root->right = huffman.RestoreHuffmanTree(root->right, bitArray, false);
     
 }
 

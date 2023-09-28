@@ -32,7 +32,7 @@ void Huffman::CreateHuffmanTree() {
     }
 }
 
-void Huffman::RestoreHuffmanTree(TreeNode *node, BitArray &bitArray, bool isLeft) {
+TreeNode* Huffman::RestoreHuffmanTree(TreeNode *node, BitArray &bitArray, bool isLeft) {
     // if (node->character != 0)
     //     return;
 
@@ -60,7 +60,7 @@ void Huffman::RestoreHuffmanTree(TreeNode *node, BitArray &bitArray, bool isLeft
     // Huffman::RestoreHuffmanTree(node->right, bitArray, false);
 
     if (node != nullptr)
-        return;
+        return nullptr;
     
     uint8_t bit = bitArray.PopBit();
 
@@ -71,13 +71,14 @@ void Huffman::RestoreHuffmanTree(TreeNode *node, BitArray &bitArray, bool isLeft
             chr.AppendBit(BitArray::BitState(chr_bit));
         }
         node = new TreeNode(0, char(chr.GetByte(0)));
-        return;
+        return node;
     }
-    else
+    else {
         node = new TreeNode(0);
-
-    Huffman::RestoreHuffmanTree(node->left, bitArray, true);
-    Huffman::RestoreHuffmanTree(node->right, bitArray, false);
+    }
+    node->left = Huffman::RestoreHuffmanTree(node->left, bitArray, true);
+    node ->right = Huffman::RestoreHuffmanTree(node->right, bitArray, false);
+    return node;
 }
 
 void Huffman::GenHuffmanCodes(const TreeNode *node, std::vector<uint8_t> code) {
