@@ -62,12 +62,14 @@ void App::Encode() {
     BitArray bitArray(8 * charsNum + newSize);
 
     SetBufferTree(bitArray, root);
-    bitArray.AlignIndex();
+    //bitArray.AlignIndex();
     int treeSize = bitArray.GetOperations();
 
     SetBuffer(bitArray, huffman.codeMap);
 
     WriteBinFile(treeSize, newSize, charsNum,bitArray);
+
+    
 }
 
 void App::Decode() {
@@ -82,6 +84,9 @@ void App::Decode() {
     root->left = huffman.RestoreHuffmanTree(root->left, bitArray, true);
     root->right = huffman.RestoreHuffmanTree(root->right, bitArray, false);
     
+    RunDecodingLoop(root, bitArray, encodedDataSize - 4 * 8, huffman);
+
+    Debug::DebugPrint(text);
 }
 
 
@@ -172,6 +177,14 @@ void App::CheckFile(T &file) {
         Debug::DebugPrint<char const [21]>("Unable to open file.");
         exit(-1);
     }   
+}
+
+void App::RunDecodingLoop(TreeNode* node, BitArray &bitArray, int size, Huffman &huffman) {
+
+    while (bitArray.GetOperations() != size) {
+        text += huffman.DecodeCodes(node, bitArray);
+        //bitArray.CountOperations();
+    }
 }
 
 

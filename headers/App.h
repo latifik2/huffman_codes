@@ -24,6 +24,7 @@ public:
     void SetBufferTree(BitArray &BitArray, TreeNode *node);
     void SetBuffer(BitArray &bitArray, std::map<char, std::vector<uint8_t>> &codeMap);
     void AllocateMem(int size);
+    void RunDecodingLoop(TreeNode* node, BitArray &bitArray, int size, Huffman &huffman);
 
 
     template <class T>

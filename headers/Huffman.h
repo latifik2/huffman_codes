@@ -16,6 +16,7 @@ public:
     void GenHuffmanCodes(const TreeNode *node, std::vector<uint8_t> code);
     int GetEncodedTextSize();
     int GetCharsNum();
+    char DecodeCodes(TreeNode* node, BitArray &bitArray);
 
     friend class App;
 

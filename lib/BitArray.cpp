@@ -35,8 +35,8 @@ uint8_t BitArray::GetBit(int i) {
 
 	//int bit_index = i < 7 ? i % 8 : 7 - (i % 8);
 	int bit_index = 7 - (i % 8);
-	Debug::DebugPrint((int)_bitArray[byte_index]);
-	Debug::DebugPrint((int)BITS[bit_index]);
+	//Debug::DebugPrint((int)_bitArray[byte_index]);
+	//Debug::DebugPrint((int)BITS[bit_index]);
 
 
 	return (uint8_t)(_bitArray[byte_index] & BITS[bit_index]) > 0 ? 1 : 0;
