@@ -108,6 +108,10 @@ int Huffman::GetCharsNum() {
     return charFreq.size();
 }
 
+int Huffman::GetNodesNum() {
+    return nodesCount;
+}
+
 char Huffman::DecodeCodes(TreeNode *node, BitArray &bitArray){
     if (node->character != 0)
         return node->character;

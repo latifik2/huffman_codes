@@ -10,8 +10,10 @@ void Debug::printBT(const std::string& prefix, const TreeNode* node, bool isLeft
 
         std::cout << (isLeft ? "├──" : "└──" );
 
-        // print the value of the node
-        std::cout << node->weigth << std::endl;
+        if (node->character != 0)
+            std::cout << node->weigth << ' ' << node->character << std::endl;
+        else
+            std::cout << node->weigth << std::endl;
 
         // enter the next tree level - left and right branch
         Debug::printBT( prefix + (isLeft ? "│   " : "    "), node->left, true);

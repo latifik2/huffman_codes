@@ -59,7 +59,8 @@ void App::Encode() {
     Debug::DebugPrint<int>(newSize);
 
     int charsNum = huffman.GetCharsNum();
-    BitArray bitArray(8 * charsNum + newSize);
+    int nodesNum = huffman.GetNodesNum();
+    BitArray bitArray(8 * charsNum + newSize + nodesNum);
 
     SetBufferTree(bitArray, root);
     //bitArray.AlignIndex();
@@ -67,7 +68,7 @@ void App::Encode() {
 
     SetBuffer(bitArray, huffman.codeMap);
 
-    WriteBinFile(treeSize, newSize, charsNum,bitArray);
+    WriteBinFile(treeSize, newSize, charsNum, nodesNum, bitArray);
 
     
 }
@@ -75,7 +76,9 @@ void App::Encode() {
 void App::Decode() {
     int treeSize = *reinterpret_cast<int*>(&encodedData[0]);
     int encodedDataSize = *reinterpret_cast<int*>(&encodedData[4]);
-    BitArray bitArray(&encodedData[8], encodedDataSize);
+    int charsNum = *reinterpret_cast<int*>(&encodedData[8]);
+    int nodesNum = *reinterpret_cast<int*>(&encodedData[12]);
+    BitArray bitArray(&encodedData[16], encodedDataSize + charsNum * 8 + nodesNum);
 
     TreeNode *root = new TreeNode(0);
     uint8_t test = bitArray.PopBit();
@@ -84,7 +87,7 @@ void App::Decode() {
     root->left = huffman.RestoreHuffmanTree(root->left, bitArray, true);
     root->right = huffman.RestoreHuffmanTree(root->right, bitArray, false);
     
-    RunDecodingLoop(root, bitArray, encodedDataSize - 4 * 8, huffman);
+    RunDecodingLoop(root, bitArray, encodedDataSize, huffman);
 
     Debug::DebugPrint(text);
 }
@@ -122,17 +125,19 @@ void App::ReadBinFile(const std::string path) {
     file.close();
 }
 
-void App::WriteBinFile(int treeSize, int newSize, int charsNum, BitArray &bitArray) {
+void App::WriteBinFile(int treeSize, int newSize, int charsNum, int nodesNum, BitArray &bitArray) {
     std::ofstream file;
     encodedData = bitArray.GetBitArray();
 
     file.open("../EncodedData", std::ios::out | std::ios::binary);
 
     CheckFile<std::ofstream>(file);
-    int size = charsNum * 8 + newSize;
+    //int size = charsNum * 8 + newSize;
 
     file.write(reinterpret_cast<const char*>(&treeSize), sizeof(int));
-    file.write(reinterpret_cast<const char*>(&size), sizeof(int));
+    file.write(reinterpret_cast<const char*>(&newSize), sizeof(int));
+    file.write(reinterpret_cast<const char*>(&charsNum), sizeof(int));
+    file.write(reinterpret_cast<const char*>(&nodesNum), sizeof(int));
     file.write(reinterpret_cast<const char*>(encodedData), bitArray.GetSize());
 
     file.close();
