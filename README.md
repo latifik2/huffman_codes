@@ -12,7 +12,7 @@ make
 
 # Running the programm
 
-build/HuffmanCLI e text.txt - encoded data
+./HuffmanCLI e text.txt - encoded data
 
 
-build/HuffmanCLI d EncodedData - decoded data
+./HuffmanCLI d EncodedData - decoded data
