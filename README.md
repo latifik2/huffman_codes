@@ -6,7 +6,7 @@ mkdir build; cd build
 
 Run cmake here, and then compile with make
 
-cmake .
+cmake ../
 
 make
 
