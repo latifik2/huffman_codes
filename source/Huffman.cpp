@@ -7,6 +7,26 @@ Huffman::Huffman()
     : nodesCount(0) {
 }
 
+Huffman::~Huffman() {
+    TreeNode *root = pq->top();
+    FreeNodes(root->left);
+    FreeNodes(root->right);
+    delete root;
+    delete pq;
+}
+
+void Huffman::FreeNodes(TreeNode *node) {
+    if (node->left == nullptr and node->right == nullptr) {
+        delete node;
+        return;
+    }
+
+    if (node->left != nullptr)
+        FreeNodes(node->left);
+    if (node->right != nullptr)
+        FreeNodes(node->right);
+}
+
 void Huffman::CountNodes() {
     this->nodesCount++;
 }

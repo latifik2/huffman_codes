@@ -7,7 +7,9 @@
 class Huffman {
 public:
     Huffman();
+    ~Huffman();
 
+    void FreeNodes(TreeNode *node);
     void CountFrequency(std::string text);
     void CountNodes();
     void CreateTreeNodes();
