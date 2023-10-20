@@ -44,17 +44,17 @@ void App::Run() {
 
 void App::Encode() {
     Huffman huffman;
-    TreeNode *root;
+    // TreeNode *root;
     std::vector<uint8_t> code;
 
     huffman.CountFrequency(this->text);
     huffman.CreateTreeNodes();
     huffman.CreateHuffmanTree();
 
-    root = huffman.pq->top();
-    huffman.GenHuffmanCodes(root, code);
+    huffman.root = huffman.pq->top();
+    huffman.GenHuffmanCodes(huffman.root, code);
    
-    Debug::printBT(root);
+    Debug::printBT(huffman.root);
     int newSize = huffman.GetEncodedTextSize();
     Debug::DebugPrint<int>(newSize);
 
@@ -62,7 +62,7 @@ void App::Encode() {
     int nodesNum = huffman.GetNodesNum();
     BitArray bitArray(8 * charsNum + newSize + nodesNum);
 
-    SetBufferTree(bitArray, root);
+    SetBufferTree(bitArray, huffman.root);
     //bitArray.AlignIndex();
     int treeSize = bitArray.GetOperations();
 
@@ -80,14 +80,15 @@ void App::Decode() {
     int nodesNum = *reinterpret_cast<int*>(&encodedData[12]);
     BitArray bitArray(&encodedData[16], encodedDataSize + charsNum * 8 + nodesNum);
 
-    TreeNode *root = new TreeNode(0);
+    Huffman huffman;
+    //TreeNode *root = new TreeNode(0);
+    huffman.root = new TreeNode(0);
     uint8_t test = bitArray.PopBit();
 
-    Huffman huffman;
-    root->left = huffman.RestoreHuffmanTree(root->left, bitArray, true);
-    root->right = huffman.RestoreHuffmanTree(root->right, bitArray, false);
+    huffman.root->left = huffman.RestoreHuffmanTree(huffman.root->left, bitArray, true);
+    huffman.root->right = huffman.RestoreHuffmanTree(huffman.root->right, bitArray, false);
     
-    RunDecodingLoop(root, bitArray, encodedDataSize, huffman);
+    RunDecodingLoop(huffman.root, bitArray, encodedDataSize, huffman);
 
     Debug::DebugPrint(text);
 }
@@ -127,7 +128,7 @@ void App::ReadBinFile(const std::string path) {
 
 void App::WriteBinFile(int treeSize, int newSize, int charsNum, int nodesNum, BitArray &bitArray) {
     std::ofstream file;
-    encodedData = bitArray.GetBitArray();
+    uint8_t *data = bitArray.GetBitArray();
 
     file.open("../EncodedData", std::ios::out | std::ios::binary);
 
@@ -138,7 +139,7 @@ void App::WriteBinFile(int treeSize, int newSize, int charsNum, int nodesNum, Bi
     file.write(reinterpret_cast<const char*>(&newSize), sizeof(int));
     file.write(reinterpret_cast<const char*>(&charsNum), sizeof(int));
     file.write(reinterpret_cast<const char*>(&nodesNum), sizeof(int));
-    file.write(reinterpret_cast<const char*>(encodedData), bitArray.GetSize());
+    file.write(reinterpret_cast<const char*>(data), bitArray.GetSize());
 
     file.close();
 }

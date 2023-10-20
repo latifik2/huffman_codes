@@ -25,7 +25,7 @@ BitArray::BitArray(uint8_t *bitArray, int bitSize)
 }
 
 BitArray::~BitArray() {
-	//delete[] bit_array;
+	delete[] _bitArray;
 }
 
 uint8_t BitArray::GetBit(int i) {

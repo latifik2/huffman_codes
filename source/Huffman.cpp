@@ -4,11 +4,10 @@
 using PQ = std::priority_queue<TreeNode *, std::vector<TreeNode *>, Compare>;
 
 Huffman::Huffman()
-    : nodesCount(0) {
+    : nodesCount(0), pq(nullptr), root(nullptr) {
 }
 
 Huffman::~Huffman() {
-    TreeNode *root = pq->top();
     FreeNodes(root->left);
     FreeNodes(root->right);
     delete root;
@@ -25,6 +24,7 @@ void Huffman::FreeNodes(TreeNode *node) {
         FreeNodes(node->left);
     if (node->right != nullptr)
         FreeNodes(node->right);
+    delete node;
 }
 
 void Huffman::CountNodes() {

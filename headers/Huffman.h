@@ -27,5 +27,6 @@ private:
     std::map<char, int> charFreq;
     std::map<char, std::vector<uint8_t>> codeMap;
     PQ *pq;
+    TreeNode *root;
     int nodesCount;
 };
