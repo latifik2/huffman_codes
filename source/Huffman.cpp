@@ -15,7 +15,7 @@ Huffman::~Huffman() {
 }
 
 void Huffman::FreeNodes(TreeNode *node) {
-    if (node->left == nullptr and node->right == nullptr) {
+    if (node->left == nullptr && node->right == nullptr) {
         delete node;
         return;
     }

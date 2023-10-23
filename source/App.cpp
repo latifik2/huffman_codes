@@ -197,7 +197,7 @@ void App::RunDecodingLoop(TreeNode* node, BitArray &bitArray, int size, Huffman 
 int main(int argc, char *argv[]) {
 
     if (argc < 3) {
-        Debug::DebugPrint<char const[]>("Not enough args.\nUsage: ./App e/d {filepath}");
+        Debug::DebugPrint("Not enough args.\nUsage: ./App e/d {filepath}");
         return -1;
     }
     App::Mode mode;
