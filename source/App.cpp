@@ -11,20 +11,15 @@
 #include "../lib/BitArray.h"
 
 App::App(Mode mode, std::string filePath)
-: mode(mode), filePath(filePath) {
+: mode(mode), filePath(filePath), fileSize(0) {
+
+    ReadBinFile(this->filePath);
 }
 
 App::~App() {
     delete[] this->encodedData;
 }
 
-void App::Init() {
-    if (this->mode == Mode::ENCODE)
-        ReadTextFile(this->filePath);
-    else
-        ReadBinFile(this->filePath);
-    
-}
 
 void App::Run() {
     switch (mode)
@@ -47,7 +42,7 @@ void App::Encode() {
     // TreeNode *root;
     std::vector<uint8_t> code;
 
-    huffman.CountFrequency(this->text);
+    huffman.CountFrequency(sourceData, fileSize);
     huffman.CreateTreeNodes();
     huffman.CreateHuffmanTree();
 
@@ -116,11 +111,17 @@ void App::ReadBinFile(const std::string path) {
     CheckFile<std::ifstream>(file);
 
     file.seekg(0, std::ios::end);
-    int size = file.tellg();
+    fileSize = file.tellg();
     file.seekg(0, std::ios::beg);
-    AllocateMem(size);
+    AllocateMem(fileSize);
 
-    file.read(reinterpret_cast<char *>(encodedData), size);
+    uint8_t* pTmp;
+    if (mode == ENCODE)
+        pTmp = sourceData;
+    else
+        pTmp = encodedData;
+
+    file.read(reinterpret_cast<char *>(pTmp), fileSize);
 
 
     file.close();
@@ -130,7 +131,7 @@ void App::WriteBinFile(int treeSize, int newSize, int charsNum, int nodesNum, Bi
     std::ofstream file;
     uint8_t *data = bitArray.GetBitArray();
 
-    file.open("../EncodedData", std::ios::out | std::ios::binary);
+    file.open("EncodedData", std::ios::out | std::ios::binary);
 
     CheckFile<std::ofstream>(file);
     //int size = charsNum * 8 + newSize;
@@ -180,7 +181,7 @@ void App::AllocateMem(int size) {
 template <class T>
 void App::CheckFile(T &file) {
     if (!file.is_open()) {
-        Debug::DebugPrint<char const [21]>("Unable to open file.");
+        Debug::DebugPrint("Unable to open file.");
         exit(-1);
     }   
 }
@@ -200,7 +201,7 @@ int main(int argc, char *argv[]) {
         Debug::DebugPrint("Not enough args.\nUsage: ./App e/d {filepath}");
         return -1;
     }
-    App::Mode mode;
+    App::Mode mode = App::BAD_VALUE;
     switch (*argv[1])
     {
     case 'e':
@@ -215,11 +216,14 @@ int main(int argc, char *argv[]) {
         break;
     }
 
+    if (mode == App::BAD_VALUE) {
+        Debug::DebugPrint("Bad argument.\nUsage: ./App e/d {filepath}");
+        return -1;
+    }
+
     std::string filePath(argv[2]);
 
-
     App app(mode, filePath);
-    app.Init();
     app.Run();
 
     return 0;

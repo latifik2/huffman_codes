@@ -4,13 +4,15 @@
 #include "Compare.h"
 #include "../lib/BitArray.h"
 
+#include <vector>
+
 class Huffman {
 public:
     Huffman();
     ~Huffman();
 
     void FreeNodes(TreeNode *node);
-    void CountFrequency(std::string text);
+    void CountFrequency(uint8_t* sourceData, int size);
     void CountNodes();
     void CreateTreeNodes();
     void CreateHuffmanTree();

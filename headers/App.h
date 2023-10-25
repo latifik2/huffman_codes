@@ -1,13 +1,15 @@
 #pragma once
 
 #include <string>
+#include <vector>
 #include "../lib/BitArray.h"
 
 class App {
 public:
     enum Mode {
         ENCODE,
-        DECODE
+        DECODE,
+        BAD_VALUE
     };
 
     App(Mode mode, std::string filePath);
@@ -35,4 +37,6 @@ private:
     std::string text;
     Mode mode;
     uint8_t *encodedData;
+    uint8_t *sourceData;
+    int fileSize;
 };

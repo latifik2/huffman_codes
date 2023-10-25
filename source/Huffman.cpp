@@ -1,4 +1,5 @@
 #include "../headers/Huffman.h"
+#include <array>
 
 //#include "../headers/TreeNode.h"
 using PQ = std::priority_queue<TreeNode *, std::vector<TreeNode *>, Compare>;
@@ -98,14 +99,14 @@ void Huffman::GenHuffmanCodes(const TreeNode *node, std::vector<uint8_t> code) {
 
 }
 
-void Huffman::CountFrequency(std::string text) {
+void Huffman::CountFrequency(uint8_t *sourceData, int fileSize) {
 
-    for (const auto &chr : text) {
-        auto it = charFreq.find(chr);
+    for (int i = 0; i < fileSize; i++) {
+        auto it = charFreq.find(sourceData[i] );
         if (it != charFreq.end())
             it->second += 1;
         else
-            charFreq[chr] = 1;
+            charFreq[sourceData[i]] = 1;
     }
 
 }
