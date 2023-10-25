@@ -17,7 +17,10 @@ App::App(Mode mode, std::string filePath)
 }
 
 App::~App() {
-    delete[] this->encodedData;
+    if (mode == ENCODE)
+        delete[] sourceData;
+    else
+        delete[] encodedData;
 }
 
 
@@ -174,7 +177,10 @@ void App::SetBuffer(BitArray &bitArray, std::map<char, std::vector<uint8_t>> &co
 }
 
 void App::AllocateMem(int size) {
-    encodedData = new uint8_t[size];
+    if (mode == ENCODE)
+        sourceData = new uint8_t[size];
+    else
+        encodedData = new uint8_t[size];
 }
 
 

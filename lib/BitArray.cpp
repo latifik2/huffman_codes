@@ -1,6 +1,7 @@
 #include "BitArray.h"
 #include "../headers/Debug.h"
 #include <cstring>
+#include <cstdint>
 
 BitArray::BitArray(int bitSize)
 	: index(0), size(bitSize / 8), opsCounter(0) {
