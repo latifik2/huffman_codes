@@ -17,10 +17,7 @@ App::App(Mode mode, std::string filePath)
 }
 
 App::~App() {
-    if (mode == ENCODE)
-        delete[] sourceData;
-    else
-        delete[] encodedData;
+    delete[] *pTmp;
 }
 
 
@@ -116,15 +113,14 @@ void App::ReadBinFile(const std::string path) {
     file.seekg(0, std::ios::end);
     fileSize = file.tellg();
     file.seekg(0, std::ios::beg);
-    AllocateMem(fileSize);
 
-    uint8_t* pTmp;
     if (mode == ENCODE)
-        pTmp = sourceData;
+        pTmp = &sourceData;
     else
-        pTmp = encodedData;
+        pTmp = &encodedData;
 
-    file.read(reinterpret_cast<char *>(pTmp), fileSize);
+    AllocateMem(fileSize);
+    file.read(reinterpret_cast<char *>(*pTmp), fileSize);
 
 
     file.close();
@@ -177,10 +173,7 @@ void App::SetBuffer(BitArray &bitArray, std::map<char, std::vector<uint8_t>> &co
 }
 
 void App::AllocateMem(int size) {
-    if (mode == ENCODE)
-        sourceData = new uint8_t[size];
-    else
-        encodedData = new uint8_t[size];
+    *pTmp = new uint8_t[size];
 }
 
 

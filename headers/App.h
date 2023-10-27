@@ -38,5 +38,6 @@ private:
     Mode mode;
     uint8_t *encodedData;
     uint8_t *sourceData;
+    uint8_t **pTmp;
     int fileSize;
 };

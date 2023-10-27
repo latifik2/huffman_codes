@@ -9,7 +9,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/App",
-            "args": ["e", "${workspaceFolder}/texts/text.txt"],
+            "args": ["e", "${workspaceFolder}/texts/ab.txt"],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
             "environment": [],
