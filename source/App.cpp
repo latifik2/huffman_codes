@@ -55,7 +55,8 @@ void App::Encode() {
 
     int charsNum = huffman.GetCharsNum();
     int nodesNum = huffman.GetNodesNum();
-    BitArray bitArray(8 * charsNum + newSize + nodesNum);
+    int baSize = 8 * charsNum + newSize + nodesNum + 8;
+    BitArray bitArray(baSize);
 
     SetBufferTree(bitArray, huffman.root);
     //bitArray.AlignIndex();
@@ -164,8 +165,15 @@ void App::SetBufferTree(BitArray &bitArray, TreeNode *node) {
 }
 
 void App::SetBuffer(BitArray &bitArray, std::map<char, std::vector<uint8_t>> &codeMap) {
-    for (const auto &chr : text) {
-        auto code = codeMap[chr];
+    // for (const auto &chr : text) {
+    //     auto code = codeMap[chr];
+
+    //     for (auto it = code.begin(); it != code.end(); it++)
+    //         bitArray.AppendBit(BitArray::BitState(*it));
+    // }
+
+    for (int i = 0; i < fileSize; i++) {
+        auto code = codeMap[sourceData[i]];
 
         for (auto it = code.begin(); it != code.end(); it++)
             bitArray.AppendBit(BitArray::BitState(*it));
